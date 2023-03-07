@@ -24,8 +24,7 @@ plotDf <- plotDf[order(plotDf$order), ]
 
 ggplot() +
   geom_polygon(data = plotDf, 
-               aes(x = long, y = lat, group = group, fill = anzahlPatienten), 
-               color = "black", linewidth = 0.25) + 
+               aes(x = long, y = lat, group = group, fill = anzahlPatienten)) + 
   coord_map() +
   ggmap::theme_nothing(legend = TRUE, plot) +
   ggtitle(plotTitle) +
