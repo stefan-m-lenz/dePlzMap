@@ -1,4 +1,4 @@
-#install.packages(c("ggplot2", "maptools", "mapproj", "Cairo", "ggmap"))
+#install.packages(c("ggplot2", "maptools", "mapproj", "Cairo", "ggmap", "openxlsx"))
 
 plotTitle <- "Anzahl Patienten in Studien"
 
