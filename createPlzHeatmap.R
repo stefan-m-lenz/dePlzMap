@@ -25,8 +25,20 @@ plotDf <- plotDf[order(plotDf$order), ]
 ggplot() +
   geom_polygon(data = plotDf, 
                aes(x = long, y = lat, group = group, fill = anzahlPatienten)) + 
+  scale_colour_gradient(
+    low = "#FFFFFF", high = "#115e01", na.value = "grey50", 
+    guide = "colourbar", aesthetics = "fill"
+  ) +
   coord_map() +
-  ggmap::theme_nothing(legend = TRUE, plot) +
+  ggmap::theme_nothing(legend = TRUE) +
   ggtitle(plotTitle) +
   theme(plot.title = element_text(hjust = 0.5)) # center title
+
+# PLZ für Gemeinde
+# https://github.com/zauberware/postal-codes-json-xml-csv
+
+# Bevölkerungszahl nach Gemeinde
+# Gemeindeverzeichnis-Informationssystem (GV-ISys)
+# https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/_inhalt.html#101366
+
   
