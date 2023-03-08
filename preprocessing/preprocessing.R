@@ -1,66 +1,24 @@
 # install.packages("openxlsx")
 
-# PLZ für Gemeinde
-# https://github.com/zauberware/postal-codes-json-xml-csv
-
-print_and_capture <- function(x) {
-  paste(capture.output(print(x, row.names = FALSE)), collapse = "\n")
-}
-
-# ags zu plz
+# Data source:
 # https://www.suche-postleitzahl.org/downloads
+# Open Database License (Copyright OpenStreetMap contributors)
+# Population data: Copyright Statistische Ämter des Bundes und der Länder
 
-# Bevölkerungszahl nach Gemeinde
-# Gemeindeverzeichnis-Informationssystem (GV-ISys)
-# https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/_inhalt.html#101366
 
-library(openxlsx)
-destatisDataPopulation <- read.xlsx("31122021_Auszug_GV.xlsx", sheet = 2,
-                                    startRow = 7)
-colnames(destatisDataPopulation)[1:10] <- c("Satzart", 
-                                            "Textkennzeichen",
-                                            "ARS_Land",
-                                            "ARS_RB",
-                                            "ARS_Kreis",
-                                            "ARS_VB",
-                                            "ARS_Gem",
-                                            "Gemeindename",
-                                            "Flaeche", 
-                                            "Population")
+plz_einwohner <- read.table("preprocessing/plz_einwohner.csv", sep = ",", header = TRUE, 
+                            colClasses = c(rep("character", 2), rep("numeric", 4)))
+plz_einwohner <- plz_einwohner[, c(1,3)]
+zuordnung_plz_ort <- read.table("preprocessing/zuordnung_plz_ort.csv", sep = ",", header = TRUE,
+                                colClasses = "character")
 
-destatisDataPopulation <- destatisDataPopulation[!is.na(destatisDataPopulation$ARS_Gem), ]
+zuordnung_plz_ort <- zuordnung_plz_ort[, c("plz", "bundesland")]
+zuordnung_plz_ort <- zuordnung_plz_ort[!duplicated(zuordnung_plz_ort$plz), ]
 
-# 8-digit AGS (Amtlicher Gemeindeschlüssel)
-destatisDataPopulation$ags <- paste0(destatisDataPopulation$ARS_Land,
-                                     destatisDataPopulation$ARS_RB,
-                                     destatisDataPopulation$ARS_Kreis,
-                                     destatisDataPopulation$ARS_Gem)
+populationData <- merge(plz_einwohner, zuordnung_plz_ort, by = "plz", all.x = TRUE)
+colnames(populationData)[colnames(populationData) == "einwohner"] <- "population"
+# Sanity check:
+sum(populationData$population)
 
-# TODO OpenstreetMap  Open Data Commons Open Database Lizenz 
-agsToPlz <- read.table("data/plz_ags.csv", sep = ",", header = TRUE, 
-                       colClasses = "character")
-
-plzNotKnownForAgs <- destatisDataPopulation[!(destatisDataPopulation$ags %in% agsToPlz$ags) & 
-                                              destatisDataPopulation$Population > 0, c("Gemeindename", "ags")]
-if (nrow(plzNotKnownForAgs) > 0) {
-  warning("The following AGS-keys with non-zero population could not be mapped to a PLZ",
-          print_and_capture(plzNotKnownForAgs))
-}
-
-populationData <- merge(x = agsToPlz, destatisDataPopulation, by = "ags", all.x = TRUE)
-
-if (anyNA(populationData$Population)) {
-  warning("There are entries with missing population data")
-}
-
-if (anyNA(populationData$ags)) {
-  warning("There are entries with missing AGS")
-}
-
-if (anyNA(populationData$plz)) {
-  warning("There are entries with missing PLZ")
-}
-
-# Problem: Es gibt teilweise mehrere PLZs pro AGS.
-# Damit kann einer einzigen PLZ nicht direkt eine Einwohnerzahl zugeordnet werden.
-populationData[duplicated(populationData$ags), ]
+write.table(populationData, file = "data/populationData.csv", sep = ",", 
+            row.names = FALSE, fileEncoding = "UTF-8", quote = FALSE)
