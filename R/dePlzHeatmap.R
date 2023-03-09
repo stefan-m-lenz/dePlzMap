@@ -20,12 +20,10 @@ dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColo
   if (length(bundesland) > 1 || !is.na(bundesland)) {
     plzShapes <- plzShapes[plzShapes$id %in% populationData$plz[populationData$bundesland %in% bundesland], ]
     bundeslaenderShapes <- bundeslaenderShapes[bundeslaenderShapes$id %in% bundesland, ]
-    bundeslaenderShapes$order <- bundeslaenderShapes$order - min(bundeslaenderShapes$order)
   }
   plotDf <- merge(plzShapes, data, by.x = "id", by.y = "plz", all.x = TRUE)
   plotDf <- plotDf[order(plotDf$order), ]
 
-  bundeslaenderShapes$x <- runif(n = nrow(bundeslaenderShapes))
   ggplot2::ggplot() +
     ggplot2::geom_polygon(data = plotDf,
                           ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
