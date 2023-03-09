@@ -12,4 +12,9 @@ test_that("Plotting works", {
                       bundesland = "Rheinland-Pfalz")
   expect_s3_class(plt, "ggplot")
 
+  plt <- dePlzHeatmap(data.frame(plz = c("94160", "79104", "55131"), val = c(1,2,3)),
+                      title = "Population in RLP",
+                      naVal = 0,
+                      bundesland = c("Bayern", "Baden-Württemberg", "Rheinland-Pfalz"))
+  expect_s3_class(plt, "ggplot")
 })

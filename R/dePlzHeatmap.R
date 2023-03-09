@@ -1,6 +1,7 @@
 #'
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
 dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
+                         naVal = NA,
                          populationRelative = NA, color = "#115e01") {
 
   if (!is.data.frame(data) || ncol(data) != 2 || !("plz" %in% colnames(data))) {
@@ -8,6 +9,11 @@ dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColo
   }
 
   otherColName <- colnames(data)[colnames(data) != "plz"]
+
+  if (!is.na(naVal)) {
+    data <- merge(populationData[, c("plz"), drop = FALSE], data, by = "plz", all.x = TRUE)
+    data[is.na(data[, otherColName]), otherColName] <- naVal
+  }
 
   if (!is.na(populationRelative)) {
     data <- merge(data, populationData[, c("plz", "population")], by = "plz")
