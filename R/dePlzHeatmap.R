@@ -1,22 +1,6 @@
-
-.onLoad <- function(libname, pkgname) {
-  packageStartupMessage("Preparing map data (this might take some time)")
-
-  # Source: https://public.opendatasoft.com/explore/dataset/georef-germany-postleitzahl/export/
-  plzShapes <<- maptools::readShapeSpatial(system.file("data", "georef-germany-postleitzahl.shp",
-                                                      package = pkgname, mustWork = TRUE))
-
-  # By using the argument "region", we accomplish
-  # that the column "id" contains the PLZ in the resulting data frame
-  plzShapes <<- ggplot2::fortify(plzShapes, region = "plz_code")
-
-  populationData <<- read.table(system.file("data", "populationData.csv", package = "dePlzHeatmap"),
-                                sep =",", header = TRUE, colClasses = c("character", "integer", "character"))
-}
-
 #'
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
-dePlzHeatmap <- function(data, title = "", bundesland = NA,
+dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
                          populationRelative = NA, color = "#115e01") {
 
   if (!is.data.frame(data) || ncol(data) != 2 || !("plz" %in% colnames(data))) {
@@ -35,13 +19,19 @@ dePlzHeatmap <- function(data, title = "", bundesland = NA,
 
   if (length(bundesland) > 1 || !is.na(bundesland)) {
     plzShapes <- plzShapes[plzShapes$id %in% populationData$plz[populationData$bundesland %in% bundesland], ]
+    bundeslaenderShapes <- bundeslaenderShapes[bundeslaenderShapes$id %in% bundesland, ]
+    bundeslaenderShapes$order <- bundeslaenderShapes$order - min(bundeslaenderShapes$order)
   }
   plotDf <- merge(plzShapes, data, by.x = "id", by.y = "plz", all.x = TRUE)
   plotDf <- plotDf[order(plotDf$order), ]
 
+  bundeslaenderShapes$x <- runif(n = nrow(bundeslaenderShapes))
   ggplot2::ggplot() +
     ggplot2::geom_polygon(data = plotDf,
-                 ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
+                          ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
+    ggplot2::geom_polygon(data = bundeslaenderShapes,
+                          ggplot2::aes(x = long, y = lat, group = group),
+                          colour = bundeslandBorderColor, fill = NA) +
     ggplot2::scale_colour_gradient(
       low = "#FFFFFF", high = color, na.value = "grey50",
       guide = "colourbar", aesthetics = "fill"
