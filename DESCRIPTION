@@ -1,4 +1,4 @@
-Package: dePlzHeatmap
+Package: dePlzMap
 Title: Create a heatmap based on the PLZ regions of Germany
 Version: 0.0.0.9000
 Authors@R: 

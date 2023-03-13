@@ -1,8 +1,8 @@
 #' Create a
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
-dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
-                         naVal = NA,
-                         populationRelative = NA, color = "#115e01") {
+dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
+                     naVal = NA,
+                     populationRelative = NA, color = "#115e01") {
 
   colnames(data)[colnames(data) %in% c("PLZ", "Plz")] <- "plz"
 
@@ -18,15 +18,15 @@ dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColo
   }
 
   if (!is.na(populationRelative)) {
-    data <- merge(data, populationData[, c("plz", "population")], by = "plz")
+    data <- merge(data, populationData[, c("plz", "Population")], by = "plz")
     newOtherColName <- paste(otherColName, populationRelative)
-    data[, newOtherColName] <- data[, otherColName] / data$population
+    data[, newOtherColName] <- data[, otherColName] / data$Population
     data[, otherColName] <- NULL
     otherColName <- newOtherColName
   }
 
   if (length(bundesland) > 1 || !is.na(bundesland)) {
-    plzShapes <- plzShapes[plzShapes$id %in% populationData$plz[populationData$bundesland %in% bundesland], ]
+    plzShapes <- plzShapes[plzShapes$id %in% populationData$plz[populationData$Bundesland %in% bundesland], ]
     bundeslaenderShapes <- bundeslaenderShapes[bundeslaenderShapes$id %in% bundesland, ]
   }
   plotDf <- merge(plzShapes, data, by.x = "id", by.y = "plz", all.x = TRUE)

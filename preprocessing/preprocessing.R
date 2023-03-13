@@ -29,7 +29,7 @@ populationData <- rbind(
 populationData$bundesland[populationData$plz == "19357"] <- "Brandenburg"
 populationData$bundesland[populationData$plz == "17337"] <- "Brandenburg"
 
-colnames(populationData) <- c("PLZ", "Population", "Bundesland")
+colnames(populationData) <- c("plz", "Population", "Bundesland")
 
 write.csv(populationData, file = "inst/extdata/populationData.csv",
           quote = FALSE, row.names = FALSE)
