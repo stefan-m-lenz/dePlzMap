@@ -1,4 +1,4 @@
-plz,population,bundesland
+PLZ,Population,Bundesland
 01067,11957,Sachsen
 01069,25491,Sachsen
 01097,14821,Sachsen
@@ -1011,7 +1011,7 @@ plz,population,bundesland
 17328,2056,Mecklenburg-Vorpommern
 17329,796,Mecklenburg-Vorpommern
 17335,5355,Mecklenburg-Vorpommern
-17337,3443,Mecklenburg-Vorpommern
+17337,3443,Brandenburg
 17348,4834,Mecklenburg-Vorpommern
 17349,3328,Mecklenburg-Vorpommern
 17358,10160,Mecklenburg-Vorpommern
@@ -1142,7 +1142,7 @@ plz,population,bundesland
 19336,3307,Brandenburg
 19339,3643,Brandenburg
 19348,14042,Brandenburg
-19357,6757,Mecklenburg-Vorpommern
+19357,6757,Brandenburg
 19370,17490,Mecklenburg-Vorpommern
 19372,5076,Mecklenburg-Vorpommern
 19374,5097,Mecklenburg-Vorpommern
@@ -8169,3 +8169,5 @@ plz,population,bundesland
 99994,6384,Thüringen
 99996,1995,Thüringen
 99998,4942,Thüringen
+98554,NA,Thüringen
+98711,NA,Thüringen

@@ -1,8 +1,10 @@
-#'
+#' Create a
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
 dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
                          naVal = NA,
                          populationRelative = NA, color = "#115e01") {
+
+  colnames(data)[colnames(data) %in% c("PLZ", "Plz")] <- "plz"
 
   if (!is.data.frame(data) || ncol(data) != 2 || !("plz" %in% colnames(data))) {
     stop("Argument \"data\" must be a two-column data frame with one column named \"plz\".")
@@ -30,18 +32,24 @@ dePlzHeatmap <- function(data, title = "", bundesland = NA, bundeslandBorderColo
   plotDf <- merge(plzShapes, data, by.x = "id", by.y = "plz", all.x = TRUE)
   plotDf <- plotDf[order(plotDf$order), ]
 
-  ggplot2::ggplot() +
+  continousColorScale <- ggplot2::scale_colour_gradient(
+    low = "#FFFFFF", high = color, na.value = "grey50",
+    guide = "colourbar", aesthetics = "fill"
+  )
+
+  ret <- ggplot2::ggplot() +
     ggplot2::geom_polygon(data = plotDf,
                           ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
     ggplot2::geom_polygon(data = bundeslaenderShapes,
                           ggplot2::aes(x = long, y = lat, group = group),
                           colour = bundeslandBorderColor, fill = NA) +
-    ggplot2::scale_colour_gradient(
-      low = "#FFFFFF", high = color, na.value = "grey50",
-      guide = "colourbar", aesthetics = "fill"
-    ) +
     ggplot2::coord_map() +
     ggmap::theme_nothing(legend = TRUE) +
     ggplot2::ggtitle(title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) # center title
+
+  if (is.numeric(plotDf[, otherColName])) {
+    ret <- ret + continousColorScale
+  }
+  ret
 }

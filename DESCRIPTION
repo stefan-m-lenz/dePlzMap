@@ -3,8 +3,10 @@ Title: Create a heatmap based on the PLZ regions of Germany
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "stefan-m-lenz@web.de", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: see README
+Description: This package provides a function that can plot a map of Germany
+ or different federal states (Bundesländer) of Germany with different colors in
+ different zip code regions (PLZ/Postleitzahlregionen).
+License: file LICENSE
 Imports: ggplot2, maptools, mapproj, ggmap
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -13,4 +15,4 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
-    R (>= 2.10)
+    R (>= 4.0)

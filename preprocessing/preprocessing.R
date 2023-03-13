@@ -18,6 +18,21 @@ colnames(populationData)[colnames(populationData) == "einwohner"] <- "population
 # Sanity check:
 sum(populationData$population)
 
+# For some reason, these are not included in the original file
+# Gebietsreform Thüringen 2018?
+populationData <- rbind(
+  populationData,
+  data.frame(plz = "98554", population = NA, bundesland = "Thüringen"),
+  data.frame(plz = "98711", population = NA, bundesland = "Thüringen"))
+
+# correction (more are in the other Bundesland):
+populationData$bundesland[populationData$plz == "19357"] <- "Brandenburg"
+populationData$bundesland[populationData$plz == "17337"] <- "Brandenburg"
+
+colnames(populationData) <- c("PLZ", "Population", "Bundesland")
+
+write.csv(populationData, file = "inst/extdata/populationData.csv",
+          quote = FALSE, row.names = FALSE)
 
 #======================================
 # Geodata
