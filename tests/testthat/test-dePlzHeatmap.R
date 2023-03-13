@@ -29,7 +29,7 @@ test_that("Plotting of discrete values works", {
 })
 
 
-test_that("Warning about unknown PLZs") {
+test_that("Warning about unknown PLZs", {
   expect_warning({plt <- dePlzMap(data.frame(plz = c("941600", "891344", "791040", "55131"),
                                              val = c(1,2,3,4)),
                                   title = "Orte",
@@ -37,4 +37,4 @@ test_that("Warning about unknown PLZs") {
                                   bundesland = c("Bayern", "Baden-Württemberg", "Rheinland-Pfalz"))},
                  regexp = "791040, 891344, 941600")
   expect_s3_class(plt, "ggplot")
-}
+})
