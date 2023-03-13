@@ -18,13 +18,6 @@ colnames(populationData)[colnames(populationData) == "einwohner"] <- "population
 # Sanity check:
 sum(populationData$population)
 
-# For some reason, these are not included in the original file
-# Gebietsreform Thüringen 2018?
-populationData <- rbind(
-  populationData,
-  data.frame(plz = "98554", population = NA, bundesland = "Thüringen"),
-  data.frame(plz = "98711", population = NA, bundesland = "Thüringen"))
-
 # correction (more are in the other Bundesland):
 populationData$bundesland[populationData$plz == "19357"] <- "Brandenburg"
 populationData$bundesland[populationData$plz == "17337"] <- "Brandenburg"
@@ -38,13 +31,13 @@ write.csv(populationData, file = "inst/extdata/populationData.csv",
 # Geodata
 #======================================
 
-# Source: https://public.opendatasoft.com/explore/dataset/georef-germany-postleitzahl/export/
+# Source: https://www.suche-postleitzahl.org/downloads
 
-plzShapes <- maptools::readShapeSpatial(file.path("preprocessing", "data", "georef-de-plz", "georef-de-plz.shp"))
+plzShapes <- maptools::readShapeSpatial(file.path("preprocessing", "data", "plz-5stellig", "plz-5stellig.shp"))
 
 # By using the argument "region", we accomplish
 # that the column "id" contains the PLZ in the resulting data frame
-plzShapes <- ggplot2::fortify(plzShapes, region = "plz_code")
+plzShapes <- ggplot2::fortify(plzShapes, region = "plz")
 
 
 # Source: https://public.opendatasoft.com/explore/dataset/georef-germany-land/

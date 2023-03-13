@@ -10,6 +10,13 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
     stop("Argument \"data\" must be a two-column data frame with one column named \"plz\".")
   }
 
+  if (any(!(data$plz %in% plzShapes$id))) {
+    warning("There is no shape information for the following PLZs:\n",
+            paste(sort(data$plz[!(data$plz %in% plzShapes$id)]), collapse = ", "), "\n",
+            "These PLZs are ignored. Are you sure these are correct?")
+    data <- data[data$plz %in% plzShapes$id, ]
+  }
+
   otherColName <- colnames(data)[colnames(data) != "plz"]
 
   if (!is.na(naVal)) {
