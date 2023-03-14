@@ -1,13 +1,26 @@
-#' Create a
+#' Create a map of Germany or states of Germany that is colored according to values given for
+#' different PLZ regions.
+#' @param data a vector of PLZs or a data frame containing a column with name "plz" or "PLZ"
+#' and an additional column with a value. If a vector of PLZs is given, the number of occurences
+#' of each PLZ in the vector is used as the value.
+#' @param title a title for the plot
+#' @param bundesland a character vector containing the name(s) of German states,
+#' e.g. "Rheinland-Pfalz". If this argument specified, a map of only the specific states is created.
+#' If this argument is not specified, a complete map of Germany is created.
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
 dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
                      naVal = NA,
                      populationRelative = NA, color = "#115e01") {
 
-  colnames(data)[colnames(data) %in% c("PLZ", "Plz")] <- "plz"
-
-  if (!is.data.frame(data) || ncol(data) != 2 || !("plz" %in% colnames(data))) {
-    stop("Argument \"data\" must be a two-column data frame with one column named \"plz\".")
+  if (is.vector(data)) { # input is vector of PLZs
+    data <- as.character(data)
+    data <- data.frame(plz = data, x = 1)
+    data <- aggregate(x~plz, data = data, FUN = sum)
+  } else { # input must be a data frame
+    colnames(data)[colnames(data) %in% c("PLZ", "Plz")] <- "plz"
+    if (!is.data.frame(data) || ncol(data) != 2 || !("plz" %in% colnames(data))) {
+      stop("Argument \"data\" must be a two-column data frame with one column named \"plz\".")
+    }
   }
 
   if (any(!(data$plz %in% plzShapes$id))) {
@@ -51,9 +64,12 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
                           ggplot2::aes(x = long, y = lat, group = group),
                           colour = bundeslandBorderColor, fill = NA) +
     ggplot2::coord_map() +
-    ggmap::theme_nothing(legend = TRUE) +
-    ggplot2::ggtitle(title) +
-    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) # center title
+    ggmap::theme_nothing(legend = TRUE)
+
+  if (title != "") {
+    ret <- ret + ggplot2::ggtitle(title) +
+      ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) # center title
+  }
 
   if (is.numeric(plotDf[, otherColName])) {
     ret <- ret + continousColorScale

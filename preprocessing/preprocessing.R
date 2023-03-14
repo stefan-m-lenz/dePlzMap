@@ -1,3 +1,5 @@
+# install.packages(c("maptools", "rgeos", "rgdal"))
+
 # Data source:
 # https://www.suche-postleitzahl.org/downloads
 # Open Database License (Copyright OpenStreetMap contributors)
@@ -5,10 +7,12 @@
 
 
 plz_einwohner <- read.table("preprocessing/data/plz_einwohner.csv", sep = ",", header = TRUE,
-                            colClasses = c(rep("character", 2), rep("numeric", 4)))
+                            colClasses = c(rep("character", 2), rep("numeric", 4)),
+                            encoding = "UTF-8")
 plz_einwohner <- plz_einwohner[, c(1,3)]
 zuordnung_plz_ort <- read.table("preprocessing/data/zuordnung_plz_ort.csv", sep = ",", header = TRUE,
-                                colClasses = "character")
+                                colClasses = "character",
+                                encoding = "UTF-8")
 
 zuordnung_plz_ort <- zuordnung_plz_ort[, c("plz", "bundesland")]
 zuordnung_plz_ort <- zuordnung_plz_ort[!duplicated(zuordnung_plz_ort$plz), ]
@@ -32,7 +36,6 @@ write.csv(populationData, file = "inst/extdata/populationData.csv",
 #======================================
 
 # Source: https://www.suche-postleitzahl.org/downloads
-
 plzShapes <- maptools::readShapeSpatial(file.path("preprocessing", "data", "plz-5stellig", "plz-5stellig.shp"))
 
 # By using the argument "region", we accomplish

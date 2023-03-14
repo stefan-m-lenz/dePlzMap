@@ -38,3 +38,9 @@ test_that("Warning about unknown PLZs", {
                  regexp = "791040, 891344, 941600")
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("Providing a vector as input works", {
+  plt <- dePlzMap(data = c(rep("94160", 19), rep("79104", 40), rep("55131", 5), rep("89134", 5)),
+                  bundesland = c("Bayern", "Baden-Württemberg", "Rheinland-Pfalz"))
+  expect_s3_class(plt, "ggplot")
+})
