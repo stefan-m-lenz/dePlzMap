@@ -9,13 +9,16 @@
 #' If this argument is not specified, a complete map of Germany is created.
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
 dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
-                     naVal = NA,
-                     populationRelative = NA, color = "#115e01") {
+                     naVal = NA, legendTitle = NA,
+                     populationRelative = FALSE, color = "#115e01") {
 
   if (is.vector(data)) { # input is vector of PLZs
     data <- as.character(data)
     data <- data.frame(plz = data, x = 1)
     data <- aggregate(x~plz, data = data, FUN = sum)
+    if (is.na(legendTitle)) {
+      legendTitle <- ""
+    }
   } else { # input must be a data frame
     colnames(data)[colnames(data) %in% c("PLZ", "Plz")] <- "plz"
     if (!is.data.frame(data) || ncol(data) != 2 || !("plz" %in% colnames(data))) {
@@ -37,9 +40,9 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
     data[is.na(data[, otherColName]), otherColName] <- naVal
   }
 
-  if (!is.na(populationRelative)) {
+  if (populationRelative) {
     data <- merge(data, populationData[, c("plz", "Population")], by = "plz")
-    newOtherColName <- paste(otherColName, populationRelative)
+    newOtherColName <- paste(otherColName, "pro Einwohner")
     data[, newOtherColName] <- data[, otherColName] / data$Population
     data[, otherColName] <- NULL
     otherColName <- newOtherColName
@@ -57,6 +60,12 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
     guide = "colourbar", aesthetics = "fill"
   )
 
+  if (!is.na(legendTitle) && legendTitle != "") {
+    # rename column because this defines the legend title in the plot
+    colnames(plotDf)[colnames(plotDf) == otherColName] <- legendTitle
+    otherColName <- legendTitle
+  }
+
   ret <- ggplot2::ggplot() +
     ggplot2::geom_polygon(data = plotDf,
                           ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
@@ -65,6 +74,10 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
                           colour = bundeslandBorderColor, fill = NA) +
     ggplot2::coord_map() +
     ggmap::theme_nothing(legend = TRUE)
+
+  if (!is.na(legendTitle) && legendTitle == "") {
+    ret <- ret + ggplot2::theme(legend.title = ggplot2::element_blank())
+  }
 
   if (title != "") {
     ret <- ret + ggplot2::ggtitle(title) +

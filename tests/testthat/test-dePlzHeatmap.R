@@ -8,7 +8,8 @@ test_that("Plotting of continuous values works", {
 
   data2 <- data.frame(plz = data$plz, Zwei = data$Population*2)
   plt <- dePlzMap(data2, title = "Population in RLP",
-                  populationRelative = "pro Einwohner",
+                  populationRelative = TRUE,
+                  legendTitle = "Pro Einwohner",
                   bundesland = "Rheinland-Pfalz")
   expect_s3_class(plt, "ggplot")
 

@@ -57,6 +57,8 @@ bundeslaenderShapes2 <- ggplot2::fortify(bundeslaenderShapes2, region = "lan_nam
 bundeslaenderShapes2$order <- max(bundeslaenderShapes1$order) + bundeslaenderShapes2$order
 bundeslaenderShapes <- rbind(bundeslaenderShapes1, bundeslaenderShapes2)
 bundeslaenderShapes$id <- gsub(pattern = "\\['(.*)'\\]", replacement = "\\1", x = bundeslaenderShapes$id)
+bundeslaenderShapes$id[bundeslaenderShapes$id == "ThÃ¼ringen"] <- "Thüringen"
+bundeslaenderShapes$id[bundeslaenderShapes$id == "Baden-WÃ¼rttemberg"] <- "Baden-Württemberg"
 
 library(usethis)
 # Save Data to sysdata.rda, see https://r-pkgs.org/data.html#sec-data-sysdata
