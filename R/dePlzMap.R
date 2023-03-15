@@ -78,11 +78,8 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
   }
 
   ret <- ggplot2::ggplot() +
-    # Argument colour = "" as a trick that is needed to display the legend for the NA values
-    # see https://stackoverflow.com/questions/42365483/add-a-box-for-the-na-values-to-the-ggplot-legend-for-a-continuous-map
     ggplot2::geom_polygon(data = plotDf,
-                          ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]],
-                                       colour = "")) +
+                          ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
     ggplot2::geom_polygon(data = bundeslaenderShapes,
                           ggplot2::aes(x = long, y = lat, group = group),
                           colour = bundeslandBorderColor, fill = NA) +
@@ -98,10 +95,13 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
   }
 
   if (anyNA(plotDf[, otherColName])) {
-    print("add guide")
-    ret <- ret + ggplot2::scale_colour_manual(values = NA, name = naLabel) +
-      ggplot2::guides(colour = ggplot2::guide_legend(naLabel,
-                                                     override.aes = list(fill = naColor)))
+    # Argument colour = "" as a trick that is needed to display the legend for the NA values
+    # see https://stackoverflow.com/questions/42365483/add-a-box-for-the-na-values-to-the-ggplot-legend-for-a-continuous-map
+    ret <- ret + ggplot2::geom_polygon(data = plotDf[1, ],
+                                       ggplot2::aes(x = long, y = lat, group = group, color = ""))
+    ret <- ret + ggplot2::scale_colour_manual(values = NA, drop = FALSE) +
+      ggplot2::guides(color = ggplot2::guide_legend(naLabel,
+                                                    override.aes = list(fill = naColor)))
   }
 
   if (title != "") {
