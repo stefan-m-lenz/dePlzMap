@@ -10,7 +10,10 @@
 #' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
 dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
                      naVal = NA, legendTitle = NA,
-                     populationRelative = FALSE, color = "#115e01") {
+                     populationRelative = FALSE, percentage = populationRelative,
+                     decimalMark = ",",
+                     naColor = "grey50", naLabel = "No Data",
+                     color = "#115e01") {
 
   if (is.vector(data)) { # input is vector of PLZs
     data <- as.character(data)
@@ -55,10 +58,18 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
   plotDf <- merge(plzShapes, data, by.x = "id", by.y = "plz", all.x = TRUE)
   plotDf <- plotDf[order(plotDf$order), ]
 
-  continousColorScale <- ggplot2::scale_colour_gradient(
-    low = "#FFFFFF", high = color, na.value = "grey50",
-    guide = "colourbar", aesthetics = "fill"
-  )
+  if (percentage) {
+    continousColorScale <- ggplot2::scale_fill_gradient(
+      low = "#FFFFFF", high = color, na.value = naColor,
+      guide = "colourbar", aesthetics = "fill",
+      labels = scales::label_percent(decimal.mark = decimalMark),
+    )
+  } else {
+    continousColorScale <- ggplot2::scale_fill_gradient(
+      low = "#FFFFFF", high = color, na.value = naColor,
+      guide = "colourbar", aesthetics = "fill"
+    )
+  }
 
   if (!is.na(legendTitle) && legendTitle != "") {
     # rename column because this defines the legend title in the plot
@@ -67,8 +78,11 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
   }
 
   ret <- ggplot2::ggplot() +
+    # Argument colour = "" as a trick that is needed to display the legend for the NA values
+    # see https://stackoverflow.com/questions/42365483/add-a-box-for-the-na-values-to-the-ggplot-legend-for-a-continuous-map
     ggplot2::geom_polygon(data = plotDf,
-                          ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
+                          ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]],
+                                       colour = "")) +
     ggplot2::geom_polygon(data = bundeslaenderShapes,
                           ggplot2::aes(x = long, y = lat, group = group),
                           colour = bundeslandBorderColor, fill = NA) +
@@ -79,13 +93,20 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
     ret <- ret + ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
+  if (is.numeric(plotDf[, otherColName])) {
+    ret <- ret + continousColorScale
+  }
+
+  if (anyNA(plotDf[, otherColName])) {
+    print("add guide")
+    ret <- ret + ggplot2::scale_colour_manual(values = NA, name = naLabel) +
+      ggplot2::guides(colour = ggplot2::guide_legend(naLabel,
+                                                     override.aes = list(fill = naColor)))
+  }
+
   if (title != "") {
     ret <- ret + ggplot2::ggtitle(title) +
       ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) # center title
-  }
-
-  if (is.numeric(plotDf[, otherColName])) {
-    ret <- ret + continousColorScale
   }
   ret
 }

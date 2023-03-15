@@ -7,7 +7,7 @@ Description: This package provides a function that can plot a map of Germany
  or different federal states (Bundesländer) of Germany with different colors in
  different zip code regions (PLZ/Postleitzahlregionen).
 License: file LICENSE
-Imports: ggplot2, ggmap, mapproj
+Imports: ggplot2, ggmap, mapproj, scales
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
