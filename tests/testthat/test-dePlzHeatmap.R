@@ -40,6 +40,15 @@ test_that("Warning about unknown PLZs", {
   expect_s3_class(plt, "ggplot")
 })
 
+
+test_that("Categorical data with NAs works", {
+  plt <- dePlzMap(data = data.frame(plz = c("94160", "79104", "55131", "89134"),
+                                    value = c("1", "4", "3", "2")),
+                  bundesland = c("Bayern", "Baden-Württemberg", "Rheinland-Pfalz"))
+  expect_s3_class(plt, "ggplot")
+})
+
+
 test_that("Providing a vector as input works", {
   plt <- dePlzMap(data = c(rep("94160", 19), rep("79104", 40), rep("55131", 5), rep("89134", 5)),
                   bundesland = c("Bayern", "Baden-Württemberg", "Rheinland-Pfalz"))

@@ -92,16 +92,20 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
 
   if (is.numeric(plotDf[, otherColName])) {
     ret <- ret + continousColorScale
-  }
 
-  if (anyNA(plotDf[, otherColName])) {
-    # Argument colour = "" as a trick that is needed to display the legend for the NA values
-    # see https://stackoverflow.com/questions/42365483/add-a-box-for-the-na-values-to-the-ggplot-legend-for-a-continuous-map
-    ret <- ret + ggplot2::geom_polygon(data = plotDf[1, ],
-                                       ggplot2::aes(x = long, y = lat, group = group, color = ""))
-    ret <- ret + ggplot2::scale_colour_manual(values = NA, drop = FALSE) +
-      ggplot2::guides(color = ggplot2::guide_legend(naLabel,
-                                                    override.aes = list(fill = naColor)))
+    if (anyNA(plotDf[, otherColName])) {
+      # Argument colour = "" as a trick that is needed to display the legend for the NA values
+      # see https://stackoverflow.com/questions/42365483/add-a-box-for-the-na-values-to-the-ggplot-legend-for-a-continuous-map
+      ret <- ret + ggplot2::geom_polygon(data = plotDf[1, ],
+                                         ggplot2::aes(x = long, y = lat, group = group, color = ""))
+      ret <- ret + ggplot2::scale_colour_manual(values = NA, drop = FALSE)
+
+      # put color bar before legend for NA
+      ret <- ret + ggplot2::guides(fill = ggplot2::guide_colorbar(order = 1),
+                                   color = ggplot2::guide_legend(naLabel,
+                                                                 order = 2,
+                                                                 override.aes = list(fill = naColor, color = NA)))
+    }
   }
 
   if (title != "") {
