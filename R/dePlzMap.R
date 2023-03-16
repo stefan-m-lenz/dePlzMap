@@ -1,24 +1,49 @@
-#' Create a map of Germany or states of Germany that is colored according to values given for
-#' different PLZ regions.
-#' @param data a vector of PLZs or a data frame containing a column with name "plz" or "PLZ"
+#' Create a map of Germany that is colored according to values given for
+#' different PLZ regions
+#'
+#' It is possible to plot a complete map of Germany with all its federal states
+#' and all PLZ regeions and there is also the possibility to select only particular
+#' federal states.
+#' The appearance of the map and the legend can be customized with different options.
+#' Input values can be continuous (numeric) or discrete.
+#' There is the option to plot the values relative to the population in the different PLZ regions.
+#' The population data is currently based on the "Registerzensus 2011"
+#' of the Statistisches Bundesamt in Deutschland.
+#'
+#' @param data A vector of PLZs or a data frame containing a column with name "plz" or "PLZ"
 #' and an additional column with a value. If a vector of PLZs is given, the number of occurences
 #' of each PLZ in the vector is used as the value.
-#' @param title a title for the plot
-#' @param bundesland a character vector containing the name(s) of German states,
+#' @param bundesland A character vector containing the name(s) of German states,
 #' e.g. "Rheinland-Pfalz". If this argument specified, a map of only the specific states is created.
 #' If this argument is not specified, a complete map of Germany is created.
-#' @return a plot of Germany or a set of countries in Germany with colored PLZ areas
-dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = "gray",
-                     naVal = NA, legendTitle = NA,
+#' @param bundeslandBorderColor A color for the border around the states, default is \code{"gray"}
+#' @param highColor The color for the highest value in a plot with continuous values
+#' @param naVal If this argument is set to a value that is not NA, this value is used in place of NA values.
+#' The value is also used for PLZ regions that are not listed in the input data.
+#' @param title A title for the plot
+#' @param legendTitle A title for the legend.
+#' By default, the column name of the value column in the input data frame is used.
+#' @param populationRelative If set to \code{TRUE}, the values given for the PLZ regions are divided by the
+#' local number of inhabitants. The population data currently used is based on the Registerzensus 2011.
+#' @param percentage If set to \code{TRUE}, the legend shows the values as percentages.
+#' For example, a value of 1 is displayed as 100 %.
+#' By default, percentage values are shown if the argument \code{populationRelative} is set to \code{TRUE}.
+#' @param decimalMark The decimal mark for the legend. The default is \code{","} as in German.
+#' @param naColor The color to use for displaying NA values, defaults to \code{"gray75"}
+#' @param naLabel The text of the label in the legend for the NA values
+#' @return A plot of Germany or a map of a set of states in Germany with colored PLZ areas
+dePlzMap <- function(data, bundesland = NA, bundeslandBorderColor = "gray",
+                     highColor = "#115e01",
+                     naVal = NA,
+                     title = "", legendTitle = NA,
                      populationRelative = FALSE, percentage = populationRelative,
                      decimalMark = ",",
-                     naColor = "grey50", naLabel = "No Data",
-                     color = "#115e01") {
+                     naColor = "grey75", naLabel = "No Data") {
 
   if (is.vector(data)) { # input is vector of PLZs
     data <- as.character(data)
     data <- data.frame(plz = data, x = 1)
-    data <- aggregate(x~plz, data = data, FUN = sum)
+    data <- stats::aggregate(x~plz, data = data, FUN = sum)
     if (is.na(legendTitle)) {
       legendTitle <- ""
     }
@@ -44,9 +69,11 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
   }
 
   if (populationRelative) {
+    # calculate population-relative values in new column
     data <- merge(data, populationData[, c("plz", "Population")], by = "plz")
     newOtherColName <- paste(otherColName, "pro Einwohner")
     data[, newOtherColName] <- data[, otherColName] / data$Population
+    # use this new column for plotting
     data[, otherColName] <- NULL
     otherColName <- newOtherColName
   }
@@ -60,13 +87,13 @@ dePlzMap <- function(data, title = "", bundesland = NA, bundeslandBorderColor = 
 
   if (percentage) {
     continousColorScale <- ggplot2::scale_fill_gradient(
-      low = "#FFFFFF", high = color, na.value = naColor,
+      low = "#FFFFFF", high = highColor, na.value = naColor,
       guide = "colourbar", aesthetics = "fill",
       labels = scales::label_percent(decimal.mark = decimalMark),
     )
   } else {
     continousColorScale <- ggplot2::scale_fill_gradient(
-      low = "#FFFFFF", high = color, na.value = naColor,
+      low = "#FFFFFF", high = highColor, na.value = naColor,
       guide = "colourbar", aesthetics = "fill"
     )
   }
