@@ -28,7 +28,7 @@ populationData$bundesland[populationData$plz == "17337"] <- "Brandenburg"
 colnames(populationData) <- c("plz", "Population", "Bundesland")
 
 write.csv(populationData, file = "inst/extdata/populationData.csv",
-          quote = FALSE, row.names = FALSE)
+          quote = FALSE, row.names = FALSE, fileEncoding = "UTF-8")
 
 #======================================
 # Geodata

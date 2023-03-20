@@ -1,6 +1,11 @@
+readPopulationData <- function() {
+  read.table(system.file("extdata", "populationData.csv", package = "dePlzMap"),
+             sep =",", header = TRUE, colClasses = c("character", "integer", "character"),
+             encoding = "UTF-8")
+}
+
 test_that("Plotting of continuous values works", {
-  data <- read.table(system.file("extdata", "populationData.csv", package = "dePlzMap"),
-                     sep =",", header = TRUE, colClasses = c("character", "integer", "character"))
+  data <- readPopulationData()
   plt <- dePlzMap(data[, c("plz", "Population")], title = "Population in RLP",
                   bundesland = "Rheinland-Pfalz",
                   bundeslandBorderColor = "black")
@@ -22,8 +27,7 @@ test_that("Plotting of continuous values works", {
 
 
 test_that("Plotting of discrete values works", {
-  data <- read.table(system.file("extdata", "populationData.csv", package = "dePlzMap"),
-                     sep =",", header = TRUE, colClasses = c("character", "integer", "character"))
+  data <- readPopulationData()
   plt <- dePlzMap(data[, c("plz", "Bundesland")], title = "Bundesländer",
                   bundeslandBorderColor = "black")
   expect_s3_class(plt, "ggplot")
