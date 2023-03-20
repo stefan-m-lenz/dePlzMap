@@ -6,11 +6,10 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-<img src="man/figures/dePlzMap.png" width="270px" style="float:right" />
-
-The `dePlzMap` R package is a tool for visualizing data on a map of
-Germany, using postal code (PLZ) boundaries as geographic units. It
-provides a simple and flexible interface for creating [choropleth
+<img src="man/figures/dePlzMap.png" width="270px" align="right" /> The
+`dePlzMap` R package is a tool for visualizing data on a map of Germany,
+using postal code (PLZ) boundaries as geographic units. It provides a
+simple and flexible interface for creating [choropleth
 maps](https://en.wikipedia.org/wiki/Choropleth_map) of PLZ regions in
 Germany with continuous color scales, allowing users to explore spatial
 patterns and relationships in data. The package includes the possibility

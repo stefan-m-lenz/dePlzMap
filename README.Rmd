@@ -18,8 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-<img src="man/figures/dePlzMap.png" width="270px" style="float:right" />
-
+<img src="man/figures/dePlzMap.png" width="270px" align="right" />
 The `dePlzMap` R package is a tool for visualizing data on a map of Germany, 
 using postal code (PLZ) boundaries as geographic units. 
 It provides a simple and flexible interface for creating [choropleth maps](https://en.wikipedia.org/wiki/Choropleth_map) of 
