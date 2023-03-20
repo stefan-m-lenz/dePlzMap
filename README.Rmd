@@ -88,7 +88,8 @@ This data can now be used to display the population per PLZ region in Germany:
 dePlzMap(data = populationData[, c("plz", "Population")],
          title = "Bevölkerung in Deutschland 2011", legendTitle = "Einwohner")
 ```
-For this purpose, only two columns of the `populationData` data frame was used.
+
+For this purpose, only two columns of the `populationData` data frame were used.
 
 If only a single state or a specific set of states should be shown,
 the argument `bundesland` can be specified:

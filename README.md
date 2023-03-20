@@ -95,9 +95,10 @@ dePlzMap(data = populationData[, c("plz", "Population")],
          title = "Bevölkerung in Deutschland 2011", legendTitle = "Einwohner")
 ```
 
-<img src="man/figures/README-PopulationDE-1.png" width="600px" /> For
-this purpose, only two columns of the `populationData` data frame was
-used.
+<img src="man/figures/README-PopulationDE-1.png" width="600px" />
+
+For this purpose, only two columns of the `populationData` data frame
+were used.
 
 If only a single state or a specific set of states should be shown, the
 argument `bundesland` can be specified:
