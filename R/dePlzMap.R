@@ -1,26 +1,30 @@
-#' Create a map of Germany that is colored according to values given for
-#' different PLZ regions
+#' Choropleth map of Germany based on PLZ regions
 #'
-#' It is possible to plot a complete map of Germany with all its federal states
-#' and all PLZ regeions and there is also the possibility to select only particular
-#' federal states.
-#' The appearance of the map and the legend can be customized with different options.
-#' Input values can be continuous (numeric) or discrete.
-#' There is the option to plot the values relative to the population in the different PLZ regions.
-#' The population data is currently based on the "Registerzensus 2011"
-#' of the Statistisches Bundesamt in Deutschland.
+#' @description
+#' This function creates a map of Germany that is
+#' colored according to values given for different PLZ (postal code) regions.
+#' The appearance of the map and the legend can be customized with different
+#' options.
 #'
-#' @param data A vector of PLZs or a data frame containing a column with name "plz" or "PLZ"
+#' Input values for display on the map can be continuous (numeric) or discrete.
+#' There is also an option to plot the values relative to the population in the
+#' different PLZ regions, using data from the "Registerzensus 2011" of the
+#' Statistisches Bundesamt in Deutschland.
+#'
+#' In addition to plotting a complete map of Germany, it is possible to show
+#' only specific German states (Bundesländer) on the map.
+#'
+#' @param data A vector of PLZs or a two-column data frame containing a column with name "plz" or "PLZ"
 #' and an additional column with a value. If a vector of PLZs is given, the number of occurences
 #' of each PLZ in the vector is used as the value.
-#' @param bundesland A character vector containing the name(s) of German states,
+#' @param bundesland A character vector containing the name(s) of German states (Bundesländer),
 #' e.g. "Rheinland-Pfalz". If this argument specified, a map of only the specific states is created.
 #' If this argument is not specified, a complete map of Germany is created.
 #' @param bundeslandBorderColor A color for the border around the states, default is \code{"gray"}
 #' @param highColor The color for the highest value in a plot with continuous values
 #' @param naVal If this argument is set to a value that is not NA, this value is used in place of NA values.
 #' The value is also used for PLZ regions that are not listed in the input data.
-#' @param title A title for the plot
+#' @param title The main title for the plot.
 #' @param legendTitle A title for the legend.
 #' By default, the column name of the value column in the input data frame is used.
 #' @param populationRelative If set to \code{TRUE}, the values given for the PLZ regions are divided by the
@@ -29,9 +33,9 @@
 #' For example, a value of 1 is displayed as 100 %.
 #' By default, percentage values are shown if the argument \code{populationRelative} is set to \code{TRUE}.
 #' @param decimalMark The decimal mark for the legend. The default is \code{","} as in German.
-#' @param naColor The color to use for displaying NA values, defaults to \code{"gray75"}
-#' @param naLabel The text of the label in the legend for the NA values
-#' @return A plot of Germany or a map of a set of states in Germany with colored PLZ areas
+#' @param naColor The color to use for displaying missing (\code{NA}) values, defaults to \code{"gray75"}
+#' @param naLabel The text of the label in the legend for the missing values.
+#' @return A ggplot object representing the plot
 dePlzMap <- function(data, bundesland = NA, bundeslandBorderColor = "gray",
                      highColor = "#115e01",
                      naVal = NA,

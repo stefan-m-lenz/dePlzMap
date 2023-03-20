@@ -2,8 +2,7 @@
 % Please edit documentation in R/dePlzMap.R
 \name{dePlzMap}
 \alias{dePlzMap}
-\title{Create a map of Germany that is colored according to values given for
-different PLZ regions}
+\title{Choropleth map of Germany based on PLZ regions}
 \usage{
 dePlzMap(
   data,
@@ -21,11 +20,11 @@ dePlzMap(
 )
 }
 \arguments{
-\item{data}{A vector of PLZs or a data frame containing a column with name "plz" or "PLZ"
+\item{data}{A vector of PLZs or a two-column data frame containing a column with name "plz" or "PLZ"
 and an additional column with a value. If a vector of PLZs is given, the number of occurences
 of each PLZ in the vector is used as the value.}
 
-\item{bundesland}{A character vector containing the name(s) of German states,
+\item{bundesland}{A character vector containing the name(s) of German states (Bundesländer),
 e.g. "Rheinland-Pfalz". If this argument specified, a map of only the specific states is created.
 If this argument is not specified, a complete map of Germany is created.}
 
@@ -36,7 +35,7 @@ If this argument is not specified, a complete map of Germany is created.}
 \item{naVal}{If this argument is set to a value that is not NA, this value is used in place of NA values.
 The value is also used for PLZ regions that are not listed in the input data.}
 
-\item{title}{A title for the plot}
+\item{title}{The main title for the plot.}
 
 \item{legendTitle}{A title for the legend.
 By default, the column name of the value column in the input data frame is used.}
@@ -50,20 +49,24 @@ By default, percentage values are shown if the argument \code{populationRelative
 
 \item{decimalMark}{The decimal mark for the legend. The default is \code{","} as in German.}
 
-\item{naColor}{The color to use for displaying NA values, defaults to \code{"gray75"}}
+\item{naColor}{The color to use for displaying missing (\code{NA}) values, defaults to \code{"gray75"}}
 
-\item{naLabel}{The text of the label in the legend for the NA values}
+\item{naLabel}{The text of the label in the legend for the missing values.}
 }
 \value{
-A plot of Germany or a map of a set of states in Germany with colored PLZ areas
+A ggplot object representing the plot
 }
 \description{
-It is possible to plot a complete map of Germany with all its federal states
-and all PLZ regeions and there is also the possibility to select only particular
-federal states.
-The appearance of the map and the legend can be customized with different options.
-Input values can be continuous (numeric) or discrete.
-There is the option to plot the values relative to the population in the different PLZ regions.
-The population data is currently based on the "Registerzensus 2011"
-of the Statistisches Bundesamt in Deutschland.
+This function creates a map of Germany that is
+colored according to values given for different PLZ (postal code) regions.
+The appearance of the map and the legend can be customized with different
+options.
+
+Input values for display on the map can be continuous (numeric) or discrete.
+There is also an option to plot the values relative to the population in the
+different PLZ regions, using data from the "Registerzensus 2011" of the
+Statistisches Bundesamt in Deutschland.
+
+In addition to plotting a complete map of Germany, it is possible to show
+only specific German states (Bundesländer) on the map.
 }

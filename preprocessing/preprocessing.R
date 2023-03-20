@@ -5,7 +5,6 @@
 # Open Database License (Copyright OpenStreetMap contributors)
 # Population data: Copyright Statistische Ämter des Bundes und der Länder
 
-
 plz_einwohner <- read.table("preprocessing/data/plz_einwohner.csv", sep = ",", header = TRUE,
                             colClasses = c(rep("character", 2), rep("numeric", 4)),
                             encoding = "UTF-8")
@@ -22,7 +21,7 @@ colnames(populationData)[colnames(populationData) == "einwohner"] <- "population
 # Sanity check:
 sum(populationData$population)
 
-# correction (more are in the other Bundesland):
+# correction (more area in the other Bundesland):
 populationData$bundesland[populationData$plz == "19357"] <- "Brandenburg"
 populationData$bundesland[populationData$plz == "17337"] <- "Brandenburg"
 
