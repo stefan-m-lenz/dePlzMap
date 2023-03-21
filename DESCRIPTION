@@ -2,7 +2,7 @@ Package: dePlzMap
 Title: Create a heatmap based on the PLZ regions of Germany
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "stefan-m-lenz@web.de", role = c("aut", "cre"))
+    person("Stefan", "Lenz", , "stefan-m-lenz@web.de", role = c("aut", "cre"))
 Description: This package provides a function that can plot a map of Germany
  or different federal states (Bundesländer) of Germany with different colors in
  different zip code regions (PLZ/Postleitzahlregionen).
