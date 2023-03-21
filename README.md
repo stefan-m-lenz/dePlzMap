@@ -115,7 +115,8 @@ here that there are a few PLZ regions that go across federal state
 boundaries, e.g., in Hamburg or Brandenburg.
 
 ``` r
-dePlzMap(data = populationData[, c("plz", "Bundesland")]) + 
+dePlzMap(data = populationData[, c("plz", "Bundesland")],
+         bundeslandBorderColor = "black") + 
   ggplot2::scale_fill_manual(values = rainbow(16))
 ```
 

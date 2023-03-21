@@ -110,9 +110,9 @@ dePlzMap <- function(data, bundesland = NA, bundeslandBorderColor = "gray",
 
   ret <- ggplot2::ggplot() +
     ggplot2::geom_polygon(data = plotDf,
-                          ggplot2::aes(x = long, y = lat, group = group, fill = .data[[otherColName]])) +
+                          ggplot2::aes(x = .data[["long"]], y = .data[["lat"]], group = .data[["group"]], fill = .data[[otherColName]])) +
     ggplot2::geom_polygon(data = bundeslaenderShapes,
-                          ggplot2::aes(x = long, y = lat, group = group),
+                          ggplot2::aes(x = .data[["long"]], y = .data[["lat"]], group = .data[["group"]]),
                           colour = bundeslandBorderColor, fill = NA) +
     ggplot2::coord_map() +
     ggmap::theme_nothing(legend = TRUE)
@@ -128,7 +128,7 @@ dePlzMap <- function(data, bundesland = NA, bundeslandBorderColor = "gray",
       # Argument colour = "" as a trick that is needed to display the legend for the NA values
       # see https://stackoverflow.com/questions/42365483/add-a-box-for-the-na-values-to-the-ggplot-legend-for-a-continuous-map
       ret <- ret + ggplot2::geom_polygon(data = plotDf[1, ],
-                                         ggplot2::aes(x = long, y = lat, group = group, color = ""))
+                                         ggplot2::aes(x = .data[["long"]], y = .data[["lat"]], group = .data[["group"]], color = ""))
       ret <- ret + ggplot2::scale_colour_manual(values = NA, drop = FALSE)
 
       # put color bar before legend for NA

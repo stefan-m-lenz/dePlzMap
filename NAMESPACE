@@ -1,1 +1,3 @@
 export("dePlzMap")
+importFrom(ggplot2, .data)
+importFrom(mapproj, mapproject) # only used indirectly, suppress note in R CMD check
