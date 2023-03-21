@@ -8,16 +8,16 @@
 
 <img src="man/figures/dePlzMap.png" width="270px" align="right" /> The
 `dePlzMap` R package is a tool for visualizing data on a map of Germany,
-using postal code (PLZ) boundaries as geographic units. It provides a
-simple and flexible interface for creating [choropleth
+using postal code (PLZ) boundaries as geographic units. The package
+defines the function `dePlzMap`, which provides a simple and flexible
+interface for creating [choropleth
 maps](https://en.wikipedia.org/wiki/Choropleth_map) of PLZ regions in
 Germany with continuous color scales, allowing users to explore spatial
-patterns and relationships in data. The package includes the possibility
-to normalize the input values by population per PLZ region to show
-population-relative values. The package leverages the `ggplot2` and
-`ggmap` libraries for generating the plots. The plots can be created via
-the function `dePlzMap` which users can quickly generate informative
-maps that highlight patterns in via R.
+patterns and relationships in data. It is also possible to normalize the
+input values by population per PLZ region to show population-relative
+values. The package leverages the `ggplot2` and `ggmap` libraries for
+generating the plots. The necessary geographical data and data about the
+regions and the population is integrated in the package.
 
 ## Data
 
@@ -87,7 +87,8 @@ head(populationData)
 ```
 
 This data can now be used to display the population per PLZ region in
-Germany:
+Germany. For this purpose, only the columns `plz` and `Population` of
+the `populationData` data frame are needed:
 
 ``` r
 dePlzMap(data = populationData[, c("plz", "Population")],
@@ -95,9 +96,6 @@ dePlzMap(data = populationData[, c("plz", "Population")],
 ```
 
 <img src="man/figures/README-PopulationDE-1.png" width="600px" />
-
-For this purpose, only two columns of the `populationData` data frame
-were used.
 
 If only a single state or a specific set of states should be shown, the
 argument `bundesland` can be specified:
@@ -117,12 +115,14 @@ here that there are a few PLZ regions that go across federal state
 boundaries, e.g., in Hamburg or Brandenburg.
 
 ``` r
-dePlzMap(data = populationData[, c("plz", "Bundesland")])
+dePlzMap(data = populationData[, c("plz", "Bundesland")]) + 
+  ggplot2::scale_fill_manual(values = rainbow(16))
 ```
 
 <img src="man/figures/README-BundeslaenderPlot-1.png" width="600px" />
 
 As the resulting object is a `gpplot` object, the appearance can be
-manipulated further via the `+` operation. There are also several
-options for further customizing the plot via arguments of the `dePlzMap`
-function.
+manipulated further via the `+` operation, e.g. by changing the color
+palette for the discrete values like demonstrated above. There are also
+several options for further customizing the plot via arguments of the
+`dePlzMap` function.

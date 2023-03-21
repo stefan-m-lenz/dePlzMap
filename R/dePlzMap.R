@@ -19,10 +19,10 @@
 #' of each PLZ in the vector is used as the value.
 #' @param bundesland A character vector containing the name(s) of German states (Bundesländer),
 #' e.g. "Rheinland-Pfalz". If this argument specified, a map of only the specific states is created.
-#' If this argument is not specified, a complete map of Germany is created.
-#' @param bundeslandBorderColor A color for the border around the states, default is \code{"gray"}
-#' @param highColor The color for the highest value in a plot with continuous values
-#' @param naVal If this argument is set to a value that is not NA, this value is used in place of NA values.
+#' If this argument is not specified, a complete map of Germany is shown.
+#' @param bundeslandBorderColor A color for the border around the states, default is \code{"gray"}.
+#' @param highColor The color for the highest value in a plot with continuous values.
+#' @param naVal If this argument is set to a value that is not \code{NA}, this value is used in place of \code{NA} values.
 #' The value is also used for PLZ regions that are not listed in the input data.
 #' @param title The main title for the plot.
 #' @param legendTitle A title for the legend.
@@ -33,9 +33,9 @@
 #' For example, a value of 1 is displayed as 100 %.
 #' By default, percentage values are shown if the argument \code{populationRelative} is set to \code{TRUE}.
 #' @param decimalMark The decimal mark for the legend. The default is \code{","} as in German.
-#' @param naColor The color to use for displaying missing (\code{NA}) values, defaults to \code{"gray75"}
+#' @param naColor The color to use for displaying missing (\code{NA}) values, defaults to \code{"gray75"}.
 #' @param naLabel The text of the label in the legend for the missing values.
-#' @return A ggplot object representing the plot
+#' @return A ggplot object representing the plot.
 dePlzMap <- function(data, bundesland = NA, bundeslandBorderColor = "gray",
                      highColor = "#115e01",
                      naVal = NA,

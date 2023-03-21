@@ -26,13 +26,13 @@ of each PLZ in the vector is used as the value.}
 
 \item{bundesland}{A character vector containing the name(s) of German states (Bundesländer),
 e.g. "Rheinland-Pfalz". If this argument specified, a map of only the specific states is created.
-If this argument is not specified, a complete map of Germany is created.}
+If this argument is not specified, a complete map of Germany is shown.}
 
-\item{bundeslandBorderColor}{A color for the border around the states, default is \code{"gray"}}
+\item{bundeslandBorderColor}{A color for the border around the states, default is \code{"gray"}.}
 
-\item{highColor}{The color for the highest value in a plot with continuous values}
+\item{highColor}{The color for the highest value in a plot with continuous values.}
 
-\item{naVal}{If this argument is set to a value that is not NA, this value is used in place of NA values.
+\item{naVal}{If this argument is set to a value that is not \code{NA}, this value is used in place of \code{NA} values.
 The value is also used for PLZ regions that are not listed in the input data.}
 
 \item{title}{The main title for the plot.}
@@ -49,12 +49,12 @@ By default, percentage values are shown if the argument \code{populationRelative
 
 \item{decimalMark}{The decimal mark for the legend. The default is \code{","} as in German.}
 
-\item{naColor}{The color to use for displaying missing (\code{NA}) values, defaults to \code{"gray75"}}
+\item{naColor}{The color to use for displaying missing (\code{NA}) values, defaults to \code{"gray75"}.}
 
 \item{naLabel}{The text of the label in the legend for the missing values.}
 }
 \value{
-A ggplot object representing the plot
+A ggplot object representing the plot.
 }
 \description{
 This function creates a map of Germany that is
