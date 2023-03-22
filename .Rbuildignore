@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^preprocessing$
 ^README\.Rmd$
+dePlzMap.pdf
+make-manual.R

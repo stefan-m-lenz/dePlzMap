@@ -127,3 +127,6 @@ manipulated further via the `+` operation, e.g. by changing the color
 palette for the discrete values like demonstrated above. There are also
 several options for further customizing the plot via arguments of the
 `dePlzMap` function.
+
+More information about the arguments can be found in the [package
+manual](https://github.com/stefan-m-lenz/dePlzMap/releases/download/v1.0.0/dePlzMap.pdf).
